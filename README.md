@@ -5,17 +5,19 @@
 
 ## 1. 컴포넌트(Component)란?
 
-- html 태그 형태를 리턴하는 함수
-- 화살표 이든, 일반 함수 이든 `HTML 태그를 리턴`하면 인정.
+- `Html 태그 형태`를 리턴하는 함수
+- 화살표 함수(`rafce`)이든, 일반 함수(`rfce`) 이든 `HTML 태그를 리턴`하면 인정.
 - JSX 는 `반드시 하나의 태그`에 `포함되도록 배치`하여야 한다.
-- `<></>` 를 Fragment 라고 합니다.
+- `<></>` 를 `Fragment` 라고 합니다.
 - 파일명 및 컴포넌트 함수는 반드시 `파스칼` 이어야 한다.
 
-## 1. 컴포넌트(Component)와 page 구분
+## 1. 컴포넌트(Component)와 page 폴더 구분(관례상)
 
 - `폴더명은 반드시 소문자`로 하여야 한다.
 - 각 화면 단위로 구성한다면 `pages 폴더`에 저장
 - `하나의 html 을 완성하기 위한 배치 요소`라면 `components 폴더`에 저장
+- `/src/components/소문자컴포넌트단어/Header.jsx`
+- `/src/components/소문자컴포넌트단어/Header.css`
 
 # css
 
@@ -236,3 +238,350 @@ npm i sass -D
 
 - src/scss 폴더 생성 권장
 - src/scss/test.scss 생성 권장
+- `Watching Sass...` 실행
+
+### 6.3. 중첩(Nesting)
+
+```scss
+.wrap {
+  position: relative;
+  .notice {
+    width: 800px;
+    height: 400px;
+    a {
+      display: block;
+      &:hover {
+        background-color: red;
+      }
+      span {
+        display: block;
+      }
+    }
+  }
+}
+```
+
+### 6.4. 변수
+
+- 변수는 `$` 기호를 사용한다.
+- 가능하면 외부파일로 생성하시길 권장
+- 변수만 모은 파일명은 `_파일명.scss`은 `css 생성을 하지 않는게` 좋아요.
+
+```scss
+$width-800: 800px;
+$height-400: 400px;
+$red: red;
+.wrap {
+  position: relative;
+  .notice {
+    width: $width-800;
+    height: $height-400;
+    a {
+      display: block;
+      &:hover {
+        background-color: $red;
+      }
+      span {
+        display: block;
+      }
+    }
+  }
+}
+```
+
+- 변수만 모은 `_val.scss`, `_color.scss`
+
+```scss
+// _val.scss
+$red: red;
+```
+
+```scss
+// _color.scss
+$width-800: 800px;
+$height-400: 400px;
+```
+
+```scss
+// test.scss
+@import "val";
+@import "color";
+
+.wrap {
+  position: relative;
+  .notice {
+    width: $width-800;
+    height: $height-400;
+    a {
+      display: block;
+      &:hover {
+        background-color: $red;
+      }
+      span {
+        display: block;
+      }
+    }
+  }
+}
+```
+
+### 6.5. 함수(Mixins)
+
+- `파일명은 _붙이고 생성`, css 생성되지 말도록.
+- `src/scss/\_mixins.scss` 파일 생성
+
+```scss
+// _mixins.scss
+@mixin flex-center-center {
+  display: flex;
+  justify-self: center;
+  align-items: center;
+}
+@mixin border-line($num, $cc) {
+  border: $num solid $cc;
+}
+```
+
+```scss
+// 변수 사용하기
+@import "val";
+@import "color";
+//험수사용하기
+@import "mixins";
+.wrap {
+  position: relative;
+  @include flex-center-center;
+  .notice {
+    @include flex-center-center;
+    @include border-line(5px, #ff0000);
+    width: $width-800;
+    height: $height-400;
+    a {
+      display: block;
+      &:hover {
+        background-color: $red;
+      }
+      span {
+        display: block;
+      }
+    }
+  }
+}
+```
+
+### 6.6. `React 에서 scss` 쓰기로 했다면?
+
+- 반드시 `npm i sass -D` 가 되었다는 전제로 진행 가능.
+- `Watch Sass...` 꼭 끄셔서 불필요한 css 생성하지 마세요.
+- pages/StartPage.scss 파일 생성
+
+```jsx
+import "./StartPage.scss";
+```
+
+- pages/StartPage.module.scss 파일 생성
+
+```jsx
+import styles from "./StartPage.module.scss";
+<div className={styles.wrap}></div>;
+```
+
+# JSX 2.
+
+## 1. 변수 JSX 에서 변수 사용하기
+
+- 값의 종류 : 글자, 숫자, null, undefined, boolean, [], {}
+- 보관법(`{}`)을 이용하기 : 중괄호 표현법
+
+```jsx
+import React from "react";
+
+function Header() {
+  // js 코딩자리
+  const title = "웹 서비스 제목";
+  const version = 0.5;
+  function say() {
+    return "하하하";
+  }
+
+  const isLogin = true;
+
+  const bgObj = {
+    backgroundColor: "green",
+    color: "#fff",
+    border: "5px solid hotpink",
+  };
+  const bgObjRed = {
+    backgroundColor: "red",
+    color: "#fff",
+    border: "5px solid hotpink",
+  };
+
+  // html jsx 코드 자리
+  return (
+    <div>
+      <div style={isLogin ? bgObj : bgObjRed}>{title}</div>
+      <div>
+        버전:{version} {say()}
+      </div>
+    </div>
+  );
+}
+
+export default Header;
+```
+
+## 2. style 태그에 `css 객체` 넣기
+
+```js
+import React from "react";
+
+function Header() {
+  // js 코딩자리
+  const title = "웹 서비스 제목";
+  const version = 0.5;
+  function say() {
+    return "하하하";
+  }
+
+  // html jsx 코드 자리
+  return (
+    <div>
+      <div
+        style={{
+          backgroundColor: "green",
+          color: "#fff",
+          border: "5px solid hotpink",
+        }}
+      >
+        {title}
+      </div>
+      <div>
+        버전:{version} {say()}
+      </div>
+    </div>
+  );
+}
+
+export default Header;
+```
+
+- 아래처럼 변수에 담아서 전달하시길 추천
+
+```js
+import React from "react";
+
+function Header() {
+  // js 코딩자리
+  const title = "웹 서비스 제목";
+  const version = 0.5;
+  function say() {
+    return "하하하";
+  }
+
+  const bgObj = {
+    backgroundColor: "green",
+    color: "#fff",
+    border: "5px solid hotpink",
+  };
+
+  // html jsx 코드 자리
+  return (
+    <div>
+      <div style={bgObj}>{title}</div>
+      <div>
+        버전:{version} {say()}
+      </div>
+    </div>
+  );
+}
+
+export default Header;
+```
+
+```jsx
+import React from "react";
+
+function Header() {
+  // js 코딩자리
+  const title = "웹 서비스 제목";
+  const version = 0.5;
+  function say() {
+    return "하하하";
+  }
+
+  const isLogin = true;
+
+  const bgObj = {
+    backgroundColor: "green",
+    color: "#fff",
+    border: "5px solid hotpink",
+  };
+  const bgObjRed = {
+    backgroundColor: "red",
+    color: "#fff",
+    border: "5px solid hotpink",
+  };
+
+  // html jsx 코드 자리
+  return (
+    <div>
+      <div style={isLogin ? bgObj : bgObjRed}>{title}</div>
+      <div>
+        버전:{version} {say()}
+      </div>
+    </div>
+  );
+}
+
+export default Header;
+```
+
+## 3. css 에 객체를 별도로 모아서 관리하기
+
+- 위의 css 객체를 `객체 리터럴 오브젝트 방식` 라고 칭함.
+- 관례상 css 객체는 `파스칼` 케이스를 씁니다.
+- /pages/bg.js 파일생성
+
+```js
+export const BgObj = {
+  backgroundColor: "green",
+  color: "#fff",
+  border: "5px solid hotpink",
+};
+
+export const BgObjRed = {
+  backgroundColor: "red",
+  color: "#fff",
+  border: "5px solid hotpink",
+};
+export default BgObjRed;
+```
+
+```jsx
+import React from "react";
+mport BgObjRed, { BgObj } from "./bg";
+
+function Header() {
+  // js 코딩자리
+  const title = "웹 서비스 제목";
+  const version = 0.5;
+  function say() {
+    return "하하하";
+  }
+
+  const isLogin = true;
+
+  // html jsx 코드 자리
+  return (
+    <div>
+      <div style={isLogin ? BgObj : BgObjRed}>{title}</div>
+      <div>
+        버전:{version} {say()}
+      </div>
+    </div>
+  );
+}
+
+export default Header;
+```
