@@ -20,6 +20,6 @@ const Hello = function () {
 
 root.render(
   <div className="wrap">
-    <RegisterPage />
+    <Test />
   </div>,
 );
