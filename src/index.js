@@ -11,6 +11,7 @@ import Users from "./pages/Users";
 import Comments from "./pages/Comments";
 import Test from "./pages/Test";
 import RegisterPage from "./pages/RegisterPage";
+import Todo from "./pages/Todo";
 
 // 컴포넌트
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -20,6 +21,6 @@ const Hello = function () {
 
 root.render(
   <div className="wrap">
-    <Test />
+    <Todo />
   </div>,
 );
