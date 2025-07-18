@@ -14,6 +14,6 @@ const Hello = function () {
 
 root.render(
   <div className="wrap">
-    <Index />
+    <App />
   </div>,
 );
