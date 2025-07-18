@@ -1,15 +1,19 @@
-import React, { useRef } from "react";
+import React, { useCallback, useState } from "react";
 
 function App() {
-  const countRef = useRef(0);
-  const incre = () => {
-    countRef.current++;
-    console.log(countRef.current);
-  };
+  console.log("App : 리랜더링");
+  // js 자리
+  const [count, setCount] = useState(0);
+
+  const add = useCallback(() => {
+    setCount(count + 1);
+  }, [count]);
+
+  // jsx 자리
   return (
     <div>
-      <h1>값 보관 및 저장 {countRef.current}</h1>
-      <button onClick={incre}>증가</button>
+      <h2>Count: {count}</h2>
+      <button onClick={add}>함수 실행</button>
     </div>
   );
 }
