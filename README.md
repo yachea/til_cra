@@ -228,3 +228,58 @@ function App() {
 
 export default App;
 ```
+
+# React.memo
+
+- 불필요한 리랜더링을 막아준다.
+- props 가 전달되면 리랜더링이 일어난다.
+- 이를 최적화해보자.
+
+## 1. 문제점
+
+- 리액트 변수, 즉` useState 에 의해서 값이 변해서 리랜더링 됨`은 정상임.
+- 그러나 `리랜더링에서 제외되어야 하는 컴포넌트`를 설정 할 필요성이 있다.
+
+## 2. 해결
+
+```jsx
+import React, { useCallback, useState } from "react";
+import Chlid from "./Chlid";
+
+function App() {
+  console.log("App : 리랜더링");
+  // js 자리
+  const [count, setCount] = useState(0);
+  const [text, setText] = useState("");
+
+  const add = useCallback(() => {
+    setCount(count + 1);
+  }, [count]);
+
+  // jsx 자리
+  return (
+    <div>
+      <h2>Count: {count}</h2>
+      <button onClick={() => setCount(count + 1)}>함수 실행</button>
+      <Chlid />
+    </div>
+  );
+}
+
+export default App;
+```
+
+- React.memo 적용
+
+```jsx
+import React, { memo } from "react";
+
+function Chlid() {
+  // js 자리
+  console.log("Child : 리렌더링");
+  // jsx 자리
+  return <div>Chlid</div>;
+}
+// memo 넣어서 컨트롤+스페이스바 해서 리액트 연결하면 됨.
+export default memo(Chlid);
+```
